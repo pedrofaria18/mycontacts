@@ -14,5 +14,8 @@ module.exports = {
     'linebreak-style': 0,
     'class-methods-use-this': 'off',
     'no-promise-executor-return': 'off',
+    'consistent-return': 'off',
+    camelcase: 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
   },
 };
