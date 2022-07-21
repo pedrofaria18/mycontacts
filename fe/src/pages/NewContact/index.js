@@ -14,7 +14,7 @@ export default function NewContact() {
         <option value="123">Instagram</option>
       </Select>
 
-      <Button type="button" disabled>
+      <Button type="button">
         Salvar Alterações
       </Button>
     </>
