@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import arrow from '../../assets/images/arrow.svg';
 import edit from '../../assets/images/edit.svg';
 import trash from '../../assets/images/trash.svg';
+import Modal from '../../components/Modal';
 
 import {
   Card, Container, InputSearchContainer, Header, ListContainer,
@@ -10,6 +11,8 @@ import {
 export default function Home() {
   return (
     <Container>
+      <Modal />
+
       <InputSearchContainer>
         <input type="text" placeholder="Pesquisar contato..." />
       </InputSearchContainer>
@@ -39,31 +42,9 @@ export default function Home() {
           </div>
 
           <div className="actions">
-            <a href="/">
+            <Link to="/edit/1">
               <img src={edit} alt="Ícone de edição" />
-            </a>
-
-            <button type="button">
-              <img src={trash} alt="Ícone de exclusão" />
-            </button>
-          </div>
-        </Card>
-
-        <Card>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Pedro Faria</strong>
-              <small>instagram</small>
-            </div>
-
-            <span>pedro@gmail.com</span>
-            <span>(31) 9999-9999</span>
-          </div>
-
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="Ícone de edição" />
-            </a>
+            </Link>
 
             <button type="button">
               <img src={trash} alt="Ícone de exclusão" />
