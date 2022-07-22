@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import arrow from '../../assets/images/arrow.svg';
 import edit from '../../assets/images/edit.svg';
 import trash from '../../assets/images/trash.svg';
-import Modal from '../../components/Modal';
+import Loader from '../../components/Loader';
 
 import {
   Card, Container, InputSearchContainer, Header, ListContainer,
@@ -12,7 +12,7 @@ import {
 export default function Home() {
   return (
     <Container>
-      <Modal danger />
+      <Loader />
 
       <InputSearchContainer>
         <input type="text" placeholder="Pesquisar contato..." />
