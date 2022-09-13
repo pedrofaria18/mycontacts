@@ -1,17 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import arrow from '../../assets/images/arrow.svg';
-import edit from '../../assets/images/edit.svg';
-import trash from '../../assets/images/trash.svg';
+import arrow from "../../assets/images/arrow.svg";
+import edit from "../../assets/images/edit.svg";
+import trash from "../../assets/images/trash.svg";
 
 import {
-  Card, Container, InputSearchContainer, Header, ListContainer,
-} from './styles';
+  Card,
+  Container,
+  InputSearchContainer,
+  Header,
+  ListContainer,
+} from "./styles";
 
 export default function Home() {
   return (
     <Container>
-
       <InputSearchContainer>
         <input type="text" placeholder="Pesquisar contato..." />
       </InputSearchContainer>
@@ -50,7 +53,6 @@ export default function Home() {
             </button>
           </div>
         </Card>
-
       </ListContainer>
     </Container>
   );
