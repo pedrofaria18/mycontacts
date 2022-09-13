@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import arrow from "../../assets/images/arrow.svg";
-import edit from "../../assets/images/edit.svg";
-import trash from "../../assets/images/trash.svg";
+import arrow from '../../assets/images/arrow.svg';
+import edit from '../../assets/images/edit.svg';
+import trash from '../../assets/images/trash.svg';
 
 import {
   Card,
@@ -10,7 +10,7 @@ import {
   InputSearchContainer,
   Header,
   ListContainer,
-} from "./styles";
+} from './styles';
 
 export default function Home() {
   return (
