@@ -18,6 +18,18 @@ class HttpCLient {
     });
   }
 
+  put(path, options) {
+    return this.makeRequest(path, {
+      method: 'PUT',
+      headers: options?.headers,
+      body: options?.body,
+    });
+  }
+
+  delete(path, options) {
+    return this.makeRequest(path, { method: 'DELETE', headers: options?.headers });
+  }
+
   async makeRequest(path, options) {
     await delay(500);
 
@@ -43,7 +55,7 @@ class HttpCLient {
 
     const contentType = response.headers.get('Content-type');
 
-    if (contentType.includes('application/json')) {
+    if (contentType?.includes('application/json')) {
       responseBody = await response.json();
     }
 

@@ -14,8 +14,11 @@ import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 
 import ContactsService from '../../services/ContactsService';
 
+import toast from '../../utils/toast';
+
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 
 import {
   Card,
@@ -34,6 +37,9 @@ export default function Home() {
   const [hasError, setHasError] = useState(false);
   const [contacts, setContacts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const filteredContacts = useMemo(
     () => contacts.filter((contact) => contact.name
@@ -73,36 +79,79 @@ export default function Home() {
     loadContacts();
   }
 
+  function handleDeleteContact(contact) {
+    setContactBeingDeleted(contact);
+    setIsDeleteModalVisible(true);
+  }
+
+  function handleCloseDeleteModal() {
+    setIsDeleteModalVisible(false);
+    setContactBeingDeleted(null);
+  }
+
+  async function handleConfirmDeleteContact() {
+    try {
+      setIsLoadingDelete(true);
+
+      await ContactsService.deleteContact(contactBeingDeleted.id);
+
+      toast({
+        type: 'success',
+        text: 'Contato deletado com sucesso!',
+      });
+
+      setContacts((prevState) => prevState.filter(
+        (contact) => contact.id !== contactBeingDeleted.id,
+      ));
+      handleCloseDeleteModal();
+    } catch {
+      toast({
+        type: 'danger',
+        text: 'Ocorreu um erro ao deletar o contato!',
+      });
+    } finally {
+      setIsLoadingDelete(false);
+    }
+  }
+
   return (
     <Container>
       <Loader isLoading={isLoading} />
 
-      {
-        contacts.length > 0 && (
-          <InputSearchContainer>
-            <input
-              value={searchTerm}
-              type="text"
-              placeholder="Pesquisar contato..."
-              onChange={handleChangeSearchTerm}
-            />
-          </InputSearchContainer>
-        )
-      }
+      <Modal
+        danger
+        visible={isDeleteModalVisible}
+        isLoading={isLoadingDelete}
+        title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}" ?`}
+        confirmLabel="Deletar"
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteContact}
+      >
+        <p>Esta ação não poderá ser desfeita!</p>
+      </Modal>
+
+      {contacts.length > 0 && (
+        <InputSearchContainer>
+          <input
+            value={searchTerm}
+            type="text"
+            placeholder="Pesquisar contato..."
+            onChange={handleChangeSearchTerm}
+          />
+        </InputSearchContainer>
+      )}
 
       <Header
         justifyContent={
           // eslint-disable-next-line no-nested-ternary
           hasError
             ? 'flex-end'
-            : (
-              contacts.length > 0
-                ? 'space-between'
-                : 'center'
-            )
+            : contacts.length > 0
+              ? 'space-between'
+              : 'center'
         }
       >
-        {(!hasError && contacts.length > 0) && (
+        {!hasError && contacts.length > 0 && (
           <strong>
             {filteredContacts.length}
             {filteredContacts.length === 1 ? ' contatos' : ' contato'}
@@ -126,32 +175,27 @@ export default function Home() {
 
       {!hasError && (
         <>
-          {
-            (contacts.length < 1 && !isLoading) && (
-              <EmptyListContainer>
-                <img src={emptyBox} alt="Empty box" />
+          {contacts.length < 1 && !isLoading && (
+            <EmptyListContainer>
+              <img src={emptyBox} alt="Empty box" />
 
-                <p>
-                  Você ainda não tem nenhum contato cadastrado!
-                  Clique no botão <strong>”Novo contato”</strong>
-                  à cima para cadastrar o seu primeiro!
-                </p>
-              </EmptyListContainer>
-            )
-          }
+              <p>
+                Você ainda não tem nenhum contato cadastrado! Clique no botão{' '}
+                <strong>”Novo contato”</strong>à cima para cadastrar o seu
+                primeiro!
+              </p>
+            </EmptyListContainer>
+          )}
 
-          {
-            (
-              (contacts.length > 0 && filteredContacts.length < 1) && (
-                <SearchNotFoundContainer>
-                  <img src={magnifierQuestion} alt="Maginifier question" />
-                  <span>
-                    Nenhum resultado foi encontrado para <strong>{searchTerm}</strong>
-                  </span>
-                </SearchNotFoundContainer>
-              )
-            )
-          }
+          {contacts.length > 0 && filteredContacts.length < 1 && (
+            <SearchNotFoundContainer>
+              <img src={magnifierQuestion} alt="Maginifier question" />
+              <span>
+                Nenhum resultado foi encontrado para{' '}
+                <strong>{searchTerm}</strong>
+              </span>
+            </SearchNotFoundContainer>
+          )}
 
           {filteredContacts.length > 0 && (
             <ListHeader orderBy={orderBy}>
@@ -181,7 +225,10 @@ export default function Home() {
                   <img src={edit} alt="Ícone de edição" />
                 </Link>
 
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => handleDeleteContact(contact)}
+                >
                   <img src={trash} alt="Ícone de exclusão" />
                 </button>
               </div>
