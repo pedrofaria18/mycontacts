@@ -1,8 +1,8 @@
 import { Route, Switch } from 'react-router-dom';
 
-import EditContact from './pages/EditContact';
 import Home from './pages/Home';
 import NewContact from './pages/NewContact';
+import EditContact from './pages/EditContact';
 
 export default function Routes() {
   return (
